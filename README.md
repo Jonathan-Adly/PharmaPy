@@ -10,10 +10,11 @@ The package can be installed from the command line with the following command
 
 ## Sample Usage
 
-`from PharmaPy import request`
+`from PharmaPy import ner`
 
-`sampletext = "After surgery, David was given oxycodone for pain, prednisone to reduce inflammation, and benazepril for blood pressure control."`
+`text = "After surgery, David was given oxycodone for pain, prednisone to reduce inflammation, and benazepril for blood pressure control."`
 
-`request.get(sampletext)`
+`result = ner.predict(text)`
+`print(result) #['oxycode', 'prednisone', benazepril]`
 
 

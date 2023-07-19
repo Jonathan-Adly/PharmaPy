@@ -3,7 +3,7 @@ from transformers import AutoTokenizer, AutoModelForTokenClassification, pipelin
 tokenizer = AutoTokenizer.from_pretrained("ronoys/PyRX", model_max_length=10000000)
 model = AutoModelForTokenClassification.from_pretrained("ronoys/PyRX")
 
-def get(sentence):
+def predict(sentence):
     ner_model = pipeline(task="ner", model=model, tokenizer=tokenizer)
     val = ner_model(sentence)
     result = []
