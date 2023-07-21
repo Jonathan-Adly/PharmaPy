@@ -18,12 +18,13 @@ This extracts drug names from any text sample. Useful when you have medical note
 `text = "After surgery, David was given oxycodone for pain, prednisone to reduce inflammation, and benazepril for blood pressure control."`
 
 `result = ner.predict(text)`
-`print(result) #['oxycode', 'prednisone', benazepril]`
+
+`print(result) #['oxycode', 'prednisone', 'benazepril']`
 
 ## NADAC 
 This module performs several common tasks to get drug pricing based on the NADAC dataset. Useful when you have a list of NDCs or drug name and what to get how much they cost. 
 
-### Sample USage 
+### Sample Usage 
 
 `from PharmaPy import nadac`
 
@@ -40,9 +41,24 @@ This module performs several common tasks to get drug pricing based on the NADAC
 ```
 
 
+## RXNORM
+This module simplifies interactions with the RXNorm API. Useful to get supplemental drug information that may not be in the FDA label database.
 
 
+### Sample Usage 
 
+`from PharmaPy import rxnorm`
 
+`drug = "atorvastatin" `
+
+`formulation_containing_drug = rxnorm.get_all_formulations(drug)`
+
+`print(formulation_containing_drug)`
+
+```
+"""
+['atorvastatin 10 MG / ezetimibe 10 MG Oral Tablet [Lypqozet]', 'atorvastatin 20 MG / ezetimibe 10 MG Oral Tablet [Lypqozet]', 'atorvastatin 40 MG / ezetimibe 10 MG Oral Tablet [Lypqozet]', 'atorvastatin 80 MG / ezetimibe 10 MG Oral Tablet [Lypqozet]', 'atorvastatin 80 MG Oral Tablet [Lipitor]', 'atorvastatin 4 MG/ML Oral Suspension [Atorvaliq]', 'atorvastatin 10 MG Oral Tablet [Lipitor]', 'atorvastatin 20 MG Oral Tablet [Lipitor]', 'atorvastatin 40 MG Oral Tablet [Lipitor]', 'amlodipine 10 MG / atorvastatin 10 MG Oral Tablet [Caduet]', 'amlodipine 10 MG / atorvastatin 20 MG Oral Tablet [Caduet]', 'amlodipine 10 MG / atorvastatin 40 MG Oral Tablet [Caduet]', 'amlodipine 10 MG / atorvastatin 80 MG Oral Tablet [Caduet]', 'amlodipine 2.5 MG / atorvastatin 40 MG Oral Tablet [Caduet]', 'amlodipine 5 MG / atorvastatin 10 MG Oral Tablet [Caduet]', 'amlodipine 5 MG / atorvastatin 20 MG Oral Tablet [Caduet]', 'amlodipine 5 MG / atorvastatin 40 MG Oral Tablet [Caduet]', 'amlodipine 5 MG / atorvastatin 80 MG Oral Tablet [Caduet]', 'atorvastatin 10 MG / ezetimibe 10 MG Oral Tablet', 'atorvastatin 20 MG / ezetimibe 10 MG Oral Tablet', 'atorvastatin 40 MG / ezetimibe 10 MG Oral Tablet', 'atorvastatin 80 MG / ezetimibe 10 MG Oral Tablet', 'atorvastatin 80 MG Oral Tablet', 'atorvastatin 4 MG/ML Oral Suspension', 'amlodipine 5 MG / atorvastatin 80 MG Oral Tablet', 'amlodipine 10 MG / atorvastatin 80 MG Oral Tablet', 'amlodipine 10 MG / atorvastatin 20 MG Oral Tablet', 'amlodipine 2.5 MG / atorvastatin 10 MG Oral Tablet', 'amlodipine 2.5 MG / atorvastatin 20 MG Oral Tablet', 'amlodipine 5 MG / atorvastatin 10 MG Oral Tablet', 'amlodipine 5 MG / atorvastatin 20 MG Oral Tablet', 'amlodipine 5 MG / atorvastatin 40 MG Oral Tablet', 'amlodipine 10 MG / atorvastatin 10 MG Oral Tablet', 'amlodipine 10 MG / atorvastatin 40 MG Oral Tablet', 'amlodipine 2.5 MG / atorvastatin 40 MG Oral Tablet', 'atorvastatin 20 MG Oral Tablet', 'atorvastatin 40 MG Oral Tablet', 'atorvastatin 10 MG Oral Tablet']
+"""
+```
 
 
