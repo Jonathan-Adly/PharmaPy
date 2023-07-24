@@ -54,9 +54,3 @@ This module performs several common tasks to get drug pricing based on the NADAC
 """
 [{'ndc_description': 'ATORVASTATIN 80 MG TABLET', 'average_nadac_per_unit': '0.08744'}, {'ndc_description': 'ATORVASTATIN 40 MG TABLET', 'average_nadac_per_unit': '0.05733'}, {'ndc_description': 'ATORVASTATIN 20 MG TABLET', 'average_nadac_per_unit': '0.04069'}, {'ndc_description': 'ATORVASTATIN 10 MG TABLET', 'average_nadac_per_unit': '0.03081'}]
 """
-
-
-
-
-
-
