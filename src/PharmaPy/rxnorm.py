@@ -27,6 +27,42 @@ def get_all_matching_drug(partial_drug=None):
     return drug_list
 
 
+def get_rxcui_by_ndc(drug_ndc):
+    """
+    # This function takes any NDC-10 code (with or without hyphens) or NDC-11 code (with hyphens only) and returns the RxCUI
+    # numbers that can be used for other RxNorm functions. Some RxCUIs may return multiple RxCUI codes.
+    """
+    url = f"https://rxnav.nlm.nih.gov/REST/rxcui.json?idtype=NDC&id={drug_ndc}"
+    response = requests.get(url).json()
+
+    drug_ndc_list = []
+    for item in response["idGroup"]["rxnormId"]:
+        drug_ndc_list.append(item)
+
+    return drug_ndc_list
+
+
+def get_rxcui_by_drug(drug):
+    """
+        This function takes a drug (input format as drug name, dose, dosage form; ex. lisinopril 20mg tablet or lisinopril
+    20 mg tablet) And returns a list of RxCUIs that can be used for other functions.
+    """
+    url = f"https://rxnav.nlm.nih.gov/REST/rxcui.json?name={drug}&search=1"
+    response = requests.get(url).json()
+    drug_rxcui_list = []
+    for item in response["idGroup"]["rxnormId"]:
+        drug_rxcui_list.append(item)
+    return drug_rxcui_list
+
+
+def get_rxnorm_name(rxcui):
+    # This function takes the RxCUI and returns a drug name and dosage.
+    url = f"https://rxnav.nlm.nih.gov/REST/rxcui/{rxcui}.json"
+    response = requests.get(url).json()
+
+    return response["idGroup"]["name"]
+
+
 def get_drug_class_by_name(drug_name, exact_match=False):
     url = f"https://rxnav.nlm.nih.gov/REST/rxclass/class/byDrugName.json?drugName={drug_name}&relaSource=va"
     response = requests.get(url).json()
@@ -46,16 +82,16 @@ def get_drug_class_by_name(drug_name, exact_match=False):
 
 
 def get_drug_class_by_ndc(ndc):
-    rxcui = requests.get(
-        f"https://rxnav.nlm.nih.gov/REST/ndcstatus.json?ndc={ndc}"
-    ).json()["ndcStatus"]["rxcui"]
-    url = f"https://rxnav.nlm.nih.gov/REST/rxclass/class/byRxcui.json?rxcui={rxcui}&relaSource=va"
-    response = requests.get(url).json()
+    rxcuis = get_rxcui_by_ndc(ndc)
     results = []
-    for item in response["rxclassDrugInfoList"]["rxclassDrugInfo"]:
-        drug_name = item["minConcept"]["name"]
-        drug_class = item["rxclassMinConceptItem"]["className"]
-        results.append({"drug": drug_name, "class": drug_class})
+    for rxcui in rxcuis:
+        url = f"https://rxnav.nlm.nih.gov/REST/rxclass/class/byRxcui.json?rxcui={rxcui}&relaSource=va"
+        response = requests.get(url).json()
+
+        for item in response["rxclassDrugInfoList"]["rxclassDrugInfo"]:
+            drug_name = item["minConcept"]["name"]
+            drug_class = item["rxclassMinConceptItem"]["className"]
+            results.append({"drug": drug_name, "class": drug_class})
     # remove duplicates
     results = [dict(t) for t in {tuple(d.items()) for d in results}]
     return results
