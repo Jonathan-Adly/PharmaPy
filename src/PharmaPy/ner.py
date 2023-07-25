@@ -3,6 +3,7 @@ from transformers import AutoTokenizer, AutoModelForTokenClassification, pipelin
 tokenizer = AutoTokenizer.from_pretrained("ronoys/PyRX", model_max_length=10000000)
 model = AutoModelForTokenClassification.from_pretrained("ronoys/PyRX")
 
+
 def predict(sentence):
     ner_model = pipeline(task="ner", model=model, tokenizer=tokenizer)
     val = ner_model(sentence)
@@ -17,8 +18,8 @@ def predict(sentence):
         else:
             result.append(currentWord)
             currentWord = ""
-    
+
     output = [*set(result)]
-    while("" in output):
+    while "" in output:
         output.remove("")
-    return (output)
+    return output
