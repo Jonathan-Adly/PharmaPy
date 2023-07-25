@@ -4,10 +4,11 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-requests = "*"
-transformers = "*"
+requests = "2.31.0"
+transformers = "4.31.0"
+torch = "2.0.1" 
 
 [dev-packages]
 
 [requires]
-python_version = "3.7"
+python_version = "3.10"
