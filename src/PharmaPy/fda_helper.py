@@ -11,7 +11,7 @@ def drug_information(drug_name, route):
         return []
     
     base_url = "https://api.fda.gov/drug/label.json"
-    search_query = f"search=openfda.generic_name:\"{drug_name}\"+AND+openfda.route:\"{route}\""
+    search_query = f"search=(openfda.generic_name:\"{drug_name}\"+OR+openfda.brand_name:\"{drug_name}\")+AND+openfda.route:\"{route}\""
     api_url = f"{base_url}?{search_query}"
     response = requests.get(api_url)
 
@@ -68,5 +68,5 @@ def drug_field(drug_name, route, field):
         return None
 
 
-# drug_information("ciprofloxacin", "oral")
+# drug_information("cipro", "oral")
 # drug_field("ciprofloxacin", "oral", "spl_product_data_elements")
