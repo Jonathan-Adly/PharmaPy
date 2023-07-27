@@ -1,5 +1,5 @@
+import json
 import requests
-
 
 def get_all_formulations(drug_name):
     url = f"https://rxnav.nlm.nih.gov/REST/drugs.json?name={drug_name}"
@@ -95,3 +95,28 @@ def get_drug_class_by_ndc(ndc):
     # remove duplicates
     results = [dict(t) for t in {tuple(d.items()) for d in results}]
     return results
+
+def return_rxcui(drug_name):
+    rxcuis = get_rxcui_by_drug(drug_name)
+    results = []
+
+    # Construct array of all drug components
+    for rxcui in rxcuis:
+        url = f"https://rxnav.nlm.nih.gov/REST/rxcui/{rxcui}/allrelated.json"
+        response = requests.get(url).json() 
+        for field in response["allRelatedGroup"]["conceptGroup"]:
+            if field["tty"] == "SCDC" and "conceptProperties" in field:
+                scdc = field["conceptProperties"]                    
+                for component in scdc:
+                    results.append(component["rxcui"])
+
+    # Remove all that don't have FDA monograph
+    remove = []
+    for component in results:
+        api_url = f"https://api.fda.gov/drug/label.json?search=openfda.rxcui:{int(component)}"
+        response = requests.get(api_url).json()
+        if ("error" in response):
+            remove.append(component)
+    arr = [value for value in results if value not in remove]
+    return arr
+
