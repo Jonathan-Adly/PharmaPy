@@ -97,26 +97,22 @@ def get_drug_class_by_ndc(ndc):
     return results
 
 def return_rxcui(drug_name):
-    rxcuis = get_rxcui_by_drug(drug_name)
+    url = f"https://rxnav.nlm.nih.gov/REST/drugs.json?name={drug_name}"
+    response = requests.get(url).json()
     results = []
-
-    # Construct array of all drug components
-    for rxcui in rxcuis:
-        url = f"https://rxnav.nlm.nih.gov/REST/rxcui/{rxcui}/allrelated.json"
-        response = requests.get(url).json() 
-        for field in response["allRelatedGroup"]["conceptGroup"]:
-            if field["tty"] == "SCDC" and "conceptProperties" in field:
+    for field in response["drugGroup"]["conceptGroup"]:
+            if field["tty"] == "SCD":
                 scdc = field["conceptProperties"]                    
                 for component in scdc:
-                    results.append(component["rxcui"])
-
-    # Remove all that don't have FDA monograph
-    remove = []
-    for component in results:
-        api_url = f"https://api.fda.gov/drug/label.json?search=openfda.rxcui:{int(component)}"
+                    results.append({
+                        component["name"]:component["rxcui"]})
+    arr = []
+    for value in results:
+        rxcui = list(value.items())[0][1]
+        api_url = f"https://api.fda.gov/drug/label.json?search=openfda.rxcui:{rxcui}"
         response = requests.get(api_url).json()
-        if ("error" in response):
-            remove.append(component)
-    arr = [value for value in results if value not in remove]
+        if ("error" not in response):
+            arr.append(value)    
     return arr
 
+print (return_rxcui('ciprofloxacin'))
