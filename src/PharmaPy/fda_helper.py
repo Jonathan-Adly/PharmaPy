@@ -9,7 +9,9 @@ def drug_information(drug_name, route):
 
     if not drug_name or not route:
         return []
-    
+        
+
+
     base_url = "https://api.fda.gov/drug/label.json"
     search_query = f"search=(openfda.generic_name:\"{drug_name}\"+OR+openfda.brand_name:\"{drug_name}\")+AND+openfda.route:\"{route}\""
     api_url = f"{base_url}?{search_query}"
