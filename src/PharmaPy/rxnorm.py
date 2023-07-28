@@ -95,3 +95,27 @@ def get_drug_class_by_ndc(ndc):
     # remove duplicates
     results = [dict(t) for t in {tuple(d.items()) for d in results}]
     return results
+
+#This function takes a brand name and returns one of the generic formulations.
+#Future code may detect generic name and return the generic name.
+#Code that is in comment may not work with combination medications.
+def get_generic_name(brand_name):
+    url = f"https://rxnav.nlm.nih.gov/REST/drugs.json?name={brand_name}"
+    response = requests.get(url).json()
+
+    #generic_name_elements = []
+    #generic_name = []
+
+    for item in response["drugGroup"]["conceptGroup"]:
+        if "conceptProperties" in item:
+            split_brand_name = item["conceptProperties"][0]["synonym"].split()
+            if brand_name in split_brand_name:
+                return item["conceptProperties"][0]["name"]
+    #            generic_name_elements = item["conceptProperties"][0]["name"].split()
+
+    # for element in generic_name_elements:
+    #     if element.startswith("mg") or element.startswith ("ML") or element.isdigit():
+    #         continue
+    #     else:
+    #         generic_name.append(element)
+    #     return generic_name[0]
