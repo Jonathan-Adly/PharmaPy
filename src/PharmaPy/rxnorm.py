@@ -114,5 +114,3 @@ def return_rxcui(drug_name):
         if ("error" not in response):
             arr.append(value)    
     return arr
-
-print (return_rxcui('ciprofloxacin'))
