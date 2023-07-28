@@ -1,6 +1,7 @@
 import json
 import requests
 
+
 def get_all_formulations(drug_name):
     url = f"https://rxnav.nlm.nih.gov/REST/drugs.json?name={drug_name}"
     response = requests.get(url).json()
@@ -96,21 +97,20 @@ def get_drug_class_by_ndc(ndc):
     results = [dict(t) for t in {tuple(d.items()) for d in results}]
     return results
 
-def return_rxcui(drug_name):
+
+def get_fda_rxcuis(drug_name):
     url = f"https://rxnav.nlm.nih.gov/REST/drugs.json?name={drug_name}"
     response = requests.get(url).json()
     results = []
     for field in response["drugGroup"]["conceptGroup"]:
-            if field["tty"] == "SCD":
-                scdc = field["conceptProperties"]                    
-                for component in scdc:
-                    results.append({
-                        component["name"]:component["rxcui"]})
+        if "conceptProperties" in field:
+            for item in field["conceptProperties"]:
+                results.append({item["name"]: item["rxcui"]})
     arr = []
     for value in results:
         rxcui = list(value.items())[0][1]
         api_url = f"https://api.fda.gov/drug/label.json?search=openfda.rxcui:{rxcui}"
         response = requests.get(api_url).json()
-        if ("error" not in response):
-            arr.append(value)    
+        if "error" not in response:
+            arr.append(value)
     return arr
